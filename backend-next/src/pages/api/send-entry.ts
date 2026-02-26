@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { twilioClient, getWhatsappFromNumber } from '../../lib/twilio';
 import { sendEntrySchema } from '../../lib/validation';
 import { ApiResponse } from '../../types/api';
+import { handleCorsPreFlight } from '../../lib/cors';
 
 type ErrorWithMessage = {
   message?: string;
@@ -11,6 +12,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>,
 ) {
+  // Handle CORS preflight
+  if (handleCorsPreFlight(req, res)) return;
+
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, message: 'Method not allowed' });
   }
