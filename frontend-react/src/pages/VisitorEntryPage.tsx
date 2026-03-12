@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { PhoneEntryForm } from '../components/PhoneEntryForm';
-import { WhatsAppStatus } from '../components/WhatsAppStatus';
 import { createEntry } from '../services/api';
 import { useToast } from '../hooks/useToast';
 
@@ -46,10 +45,10 @@ export function VisitorEntryPage() {
   return (
     <div className="card">
       <div className="card-header">
-        <div className="card-icon">🏢</div>
-        <h1 className="card-title">Visitor Entry</h1>
+        <div className="card-icon">🏯</div>
+        <h1 className="card-title">Temple Entry</h1>
         <p className="card-subtitle">
-          Enter visitor's phone number — we'll send the QR code directly on WhatsApp
+          Enter your phone number — QR code will be sent on WhatsApp
         </p>
       </div>
 
@@ -58,25 +57,32 @@ export function VisitorEntryPage() {
       )}
 
       {pageState === 'sending' && (
-        <WhatsAppStatus status="sending" phone={phone} />
+        <div className="text-center p-8">
+          <div className="btn-spinner mb-4 mx-auto" style={{ width: '40px', height: '40px' }} />
+          <p>Sending QR code to your WhatsApp...</p>
+        </div>
       )}
 
       {pageState === 'sent' && (
-        <>
-          <WhatsAppStatus status="sent" phone={phone} />
-          <button className="btn btn-primary" onClick={handleReset} style={{ marginTop: '1.5rem' }}>
-            ➕ Register Another Visitor
+        <div className="text-center p-8">
+          <div className="success-icon mb-4" style={{ fontSize: '4rem' }}>✅</div>
+          <h2 className="text-2xl font-bold mb-2">Message Sent!</h2>
+          <p className="mb-6 text-gray-600">Please check your WhatsApp for the entry QR code.</p>
+          <button className="btn btn-primary" onClick={handleReset}>
+            Register Again
           </button>
-        </>
+        </div>
       )}
 
       {pageState === 'failed' && (
-        <>
-          <WhatsAppStatus status="failed" phone={phone} />
-          <button className="btn btn-primary" onClick={handleReset} style={{ marginTop: '1.5rem' }}>
-            🔄 Try Again
+        <div className="text-center p-8">
+          <div className="error-icon mb-4" style={{ fontSize: '4rem' }}>❌</div>
+          <h2 className="text-2xl font-bold mb-2">Failed</h2>
+          <p className="mb-6 text-gray-600">Something went wrong. Please check your number and try again.</p>
+          <button className="btn btn-primary" onClick={handleReset}>
+            Try Again
           </button>
-        </>
+        </div>
       )}
     </div>
   );
